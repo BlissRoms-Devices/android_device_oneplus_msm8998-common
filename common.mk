@@ -365,6 +365,18 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Prebuilts
+PRODUCT_PACKAGES += \
+    OnePlusCamera \
+    OnePlusGallery \
+    OnePlusCameraService
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilts/lib/libopcameralib-em.so:system/lib/libopcameralib-em.so  \
+    $(LOCAL_PATH)/prebuilts/lib/libstagefright.so:system/lib/libstagefright.so  \
+    $(LOCAL_PATH)/prebuilts/lib64/libstagefright.so:system/lib64/libstagefright.so  \
+    $(LOCAL_PATH)/prebuilts/etc/permissions/privapp-permissions-oem.xml:system/etc/permissions/privapp-permissions-oem.xml
+
 # Privapp Whitelist
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:system/etc/permissions/privapp-permissions-qti.xml \
