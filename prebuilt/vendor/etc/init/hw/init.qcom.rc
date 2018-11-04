@@ -320,10 +320,9 @@ on post-fs-data
     mkdir /data/misc/fm 0770 system system
     chmod 0770 /data/misc/fm
 
-    #Create PERFD deamon related dirs
-    mkdir /data/vendor/perfd 0770 root system
-    chmod 2770 /data/vendor/perfd
-    rm /data/vendor/perfd/default_values
+    # Create perfd related dirs
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
 
     # NFC vendor data
     mkdir /data/vendor/nfc 0770 nfc nfc
@@ -870,6 +869,12 @@ service vendor.sensor-sh /vendor/bin/init.qcom.sensors.sh
 
 service vendor.qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     class late_start
+    user root
+    disabled
+    oneshot
+
+service vendor.qcom-power /vendor/bin/init.qcom.power.sh
+    class main
     user root
     disabled
     oneshot
