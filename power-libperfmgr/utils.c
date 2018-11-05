@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013,2015-2017, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -26,78 +26,69 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+#define LOG_NIDEBUG 0
 
-#ifndef __POWER_HELPER_H__
-#define __POWER_HELPER_H__
+#include <dlfcn.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#include "hardware/power.h"
+#include "utils.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <log/log.h>
 
-enum stats_type {
-    //Platform Stats
-    RPM_MODE_XO = 0,
-    RPM_MODE_VMIN,
-    RPM_MODE_MAX,
-    XO_VOTERS_START = RPM_MODE_MAX,
-    VOTER_APSS = XO_VOTERS_START,
-    VOTER_MPSS,
-    VOTER_ADSP,
-    VOTER_SLPI,
-    MAX_PLATFORM_STATS,
+int sysfs_read(const char *path, char *s, int num_bytes)
+{
+    char buf[80];
+    int count;
+    int ret = 0;
+    int fd = open(path, O_RDONLY);
 
-    //WLAN Stats
-    WLAN_POWER_DEBUG_STATS = 0,
-    MAX_WLAN_STATS,
-};
+    if (fd < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error opening %s: %s\n", path, buf);
 
-enum subsystem_type {
-    SUBSYSTEM_WLAN = 0,
+        return -1;
+    }
 
-    //Don't add any lines after this line
-    SUBSYSTEM_COUNT
-};
+    if ((count = read(fd, s, num_bytes - 1)) < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", path, buf);
 
-enum wlan_sleep_states {
-    WLAN_STATE_ACTIVE = 0,
-    WLAN_STATE_DEEP_SLEEP,
+        ret = -1;
+    } else {
+        s[count] = '\0';
+    }
 
-    //Don't add any lines after this line
-    WLAN_STATES_COUNT
-};
+    close(fd);
 
-enum wlan_power_params {
-    CUMULATIVE_SLEEP_TIME_MS = 0,
-    CUMULATIVE_TOTAL_ON_TIME_MS,
-    DEEP_SLEEP_ENTER_COUNTER,
-    LAST_DEEP_SLEEP_ENTER_TSTAMP_MS,
-
-    //Don't add any lines after this line
-    WLAN_POWER_PARAMS_COUNT
-};
-
-
-#define PLATFORM_SLEEP_MODES_COUNT RPM_MODE_MAX
-
-#define MAX_RPM_PARAMS 2
-#define XO_VOTERS (MAX_PLATFORM_STATS - XO_VOTERS_START)
-#define VMIN_VOTERS 0
-
-struct stat_pair {
-    enum stats_type stat;
-    const char *label;
-    const char **parameters;
-    size_t num_parameters;
-};
-
-void set_feature(feature_t feature, int state);
-int extract_platform_stats(uint64_t *list);
-int extract_wlan_stats(uint64_t *list);
-
-#ifdef __cplusplus
+    return ret;
 }
-#endif
 
-#endif //__POWER_HELPER_H__
+int sysfs_write(const char *path, char *s)
+{
+    char buf[80];
+    int len;
+    int ret = 0;
+    int fd = open(path, O_WRONLY);
+
+    if (fd < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error opening %s: %s\n", path, buf);
+        return -1 ;
+    }
+
+    len = write(fd, s, strlen(s));
+    if (len < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", path, buf);
+
+        ret = -1;
+    }
+
+    close(fd);
+
+    return ret;
+}
