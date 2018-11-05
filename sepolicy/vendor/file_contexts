@@ -62,6 +62,9 @@
 
 /persist/battery(/.*)?                                        u:object_r:persist_battery_file:s0
 
+# Thermal
+/vendor/bin/hw/android\.hardware\.thermal@1\.1-service\.oneplus5 u:object_r:hal_thermal_default_exec:s0
+
 # Power supply
 /sys/devices/soc/.*ssusb/power_supply/usb(/.*)?                 u:object_r:sysfs_usb_supply:s0
 /sys/devices/soc/800f000.qcom,spmi/spmi-0/spmi0-02/800f000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb(/.*)?    u:object_r:sysfs_usb_supply:s0
