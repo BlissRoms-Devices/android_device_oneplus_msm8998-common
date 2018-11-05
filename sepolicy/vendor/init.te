@@ -1,3 +1,10 @@
 allow init dash_device:chr_file { getattr };
 allow init fingerprint_device:chr_file { setattr };
 allow init ipa_dev:chr_file { rw_file_perms };
+allow init socket_device:sock_file { rw_file_perms };
+allow init mpctl_data_file:file { rw_file_perms };
+allow init sysfs_msm_perf:file { rw_file_perms };
+allow init sysfs_devices_system_cpu:file { rw_file_perms };
+allow init device_latency:chr_file { rw_file_perms };
+allow init proc_touchpanel:dir { search };
+allow init proc_touchpanel:file { rw_file_perms };
