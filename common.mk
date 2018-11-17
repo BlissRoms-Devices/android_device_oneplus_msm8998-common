@@ -415,8 +415,7 @@ PRODUCT_PACKAGES += \
 -include $(LOCAL_PATH)/vendor_prop.mk
 
 # Vendor security patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.lineage.build.vendor_security_patch=2018-08-01
+VENDOR_SECURITY_PATCH := 2018-09-01
 
 # Vibrator
 PRODUCT_PACKAGES += \
