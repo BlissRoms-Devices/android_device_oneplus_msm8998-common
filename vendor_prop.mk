@@ -20,6 +20,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # ADB at boot
 persist.service.adb.enable=1
+persist.service.debuggable=1
+persist.sys.usb.config=mtp,adb
 ro.adb.secure=0
 ro.secure=0
 
@@ -118,6 +120,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # FRP
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.frp.pst=/dev/block/bootdevice/by-name/config
+
+# Google Assistant
+ro.opa.eligible_device=true
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -272,6 +277,18 @@ persist.dbg.volte_avail_ovr=1
 persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
 persist.volte_enalbed_by_hw=1 
+persist.radio.VT_HYBRID_ENABLE=1
+
+# OldSchool
+wifi.supplicant_scan_interval=2400
+persist.service.lgospd.enable=0
+persist.service.pcsync.enable=0
+touch.pressure.scale=0.003
+ro.media.enc.jpeg.quality=100
+persist.cust.tel.eons=1
+ro.config.hw_fast_dormancy=1
+persist.debug.force_burn_in=true
+ro.gps.agps_provider=1
 
 # Fling
 PRODUCT_PROPERTY_OVERRIDES += \
