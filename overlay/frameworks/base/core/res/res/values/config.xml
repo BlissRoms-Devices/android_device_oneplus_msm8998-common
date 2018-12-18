@@ -1020,6 +1020,8 @@
     <integer name="config_proximityCheckTimeout">100</integer>
     <bool name="config_proximityCheckOnWakeEnabledByDefault">true</bool>
 
+    <bool name="config_dozePulsePickup">true</bool>
+
     <!-- Boolean indicating whether the HWC setColorTransform function can be performed efficiently
          in hardware. -->
     <bool name="config_setColorTransformAccelerated">true</bool>
@@ -1064,4 +1066,5 @@
     <!-- Whether to enable OP5/T cam hack -->
     <bool name="config_enableOPcamhack">true</bool>
 
+    <bool name="config_oldQtiTelephony">false</bool>
 </resources>
