@@ -628,4 +628,5 @@
          backlight values -->
     <bool name="config_displayBrightnessBucketsInDoze">true</bool>
 
+    <bool name="config_oldQtiTelephony">false</bool>
 </resources>
