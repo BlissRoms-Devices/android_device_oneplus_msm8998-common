@@ -19,3 +19,17 @@
 keyboard.hasAssociatedDisplay = 1
 keyboard.orientationAware = 1
 
+LOCAL_C_INCLUDES := \
+    system/core/base/include \
+    system/core/init \
+    external/selinux/libselinux/include \
+    external/libcap/libcap/include
+
+LOCAL_STATIC_LIBRARIES := libbase
+
+LOCAL_SRC_FILES := init_oneplus_msm8998.cpp
+
+LOCAL_MODULE := libinit_oneplus_msm8998
+LOCAL_MODULE_TAGS := optional
+
+include $(BUILD_STATIC_LIBRARY)
