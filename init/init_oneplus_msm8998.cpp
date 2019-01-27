@@ -64,6 +64,13 @@ void property_override(char const prop[], char const value[], bool add = true)
     }
 }
 
+void property_override_dual(char const system_prop[], char const vendor_prop[],
+    char const value[])
+{
+    property_override(system_prop, value);
+    property_override(vendor_prop, value);
+}
+
 void init_target_properties()
 {
     std::string device;
@@ -184,4 +191,20 @@ void vendor_load_properties() {
     init_target_properties();
     init_fingerprint_properties();
     init_alarm_boot_properties();
+
+    std::string device;
+    std::string platform = android::base::GetProperty("ro.board.platform", "");
+
+    // fingerprint
+    if (ReadFileToString(DEVINFO_FILE, &device)) {
+        if (!strncmp(device.c_str(), "16859", 5)) {
+            // Oneplus 5
+            property_override("ro.build.description", "OnePlus5-user 9 PKQ1.180716.001 1812232046 release-keys");
+        }
+        else if (!strncmp(device.c_str(), "17801", 5)) {
+            // Oneplus 5T
+            property_override("ro.build.description", "OnePlus5T-user 9 PKQ1.180716.001 1812232046 release-keys");
+        }
+    }
+    property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "google/sunfish/sunfish:11/RP1A.201105.002/6869500:user/release-keys");
 }
