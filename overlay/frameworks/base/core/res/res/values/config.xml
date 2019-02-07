@@ -665,4 +665,7 @@
     <string name="config_defaultAssistantComponentName">com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService</string>
     <integer name="config_longPressOnHomeBehavior">3</integer>
 
+    <!-- Enable all rotations -->
+    <bool name="config_allowAllRotations">true</bool>
+
 </resources>
