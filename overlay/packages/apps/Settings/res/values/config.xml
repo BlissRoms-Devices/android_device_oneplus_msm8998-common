@@ -27,4 +27,5 @@
 
     <!-- Device specific gesture package -->
     <string name="config_customGesturePackage">org.omnirom.device/org.omnirom.device.GestureSettings</string>
+
 </resources>
