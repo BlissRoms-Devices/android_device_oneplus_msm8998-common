@@ -93,7 +93,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.camera.aux.packagelist=com.oneplus.camera,com.android.camera,com.google.android.Pixel2ModUrnyx05 \
-    camera.hal1.packagelist=com.oneplus.camera \
+    camera.hal1.packagelist=com.oneplus.camera,com.skype.raider,com.google.android.talk,com.whatsapp \
     persist.camera.mobicat=2 \
     persist.camera.stats.debugexif=3080192 \
     persist.ts.rtmakeup=false \
