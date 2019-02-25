@@ -320,6 +320,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.dbg.wfc_avail_ovr=1 \
     persist.radio.calls.on.ims=1
 
+# VNDK
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.vndk.version=28
+
 # Wi-Fi
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
