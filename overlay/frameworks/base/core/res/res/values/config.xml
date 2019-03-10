@@ -632,4 +632,9 @@
 
     <!-- Does device supports fast charging ? -->
     <bool name="config_FastChargingLedSupported">true</bool> 
+
+    <!-- Component name for default assistant on this device -->
+    <string name="config_defaultAssistantComponentName">com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService</string>
+    <integer name="config_longPressOnHomeBehavior">3</integer>
+
 </resources>
