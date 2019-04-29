@@ -1056,4 +1056,7 @@
     <!-- Whether device ignores the RSSNR signal implementation -->
     <bool name="config_ignoreRssnrSignalLevel">true</bool>
 
+    <!-- Fingerprint sensor gestures -->
+    <bool name="config_supportSystemNavigationKeys">true</bool>
+
 </resources>
