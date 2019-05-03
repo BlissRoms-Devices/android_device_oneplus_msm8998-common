@@ -650,4 +650,19 @@
 
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">true</bool>
+
+    <!-- Whether to enable doze always on -->
+    <bool name="config_enableDozeAlwaysOn">true</bool>
+
+    <!-- Specify custom blanking delay of the display -->
+    <integer name="config_screen_off_delay">0</integer>
+
+    <!-- Specifies whether to decouple the auto-suspend state of the device from the display on/off state. -->
+    <bool name="config_powerDecoupleAutoSuspendModeFromDisplay">true</bool>
+
+     <!-- Default value for proximity check on screen wake -->
+     <bool name="config_proximityCheckOnWake">true</bool>
+     <integer name="config_proximityCheckTimeout">100</integer>
+     <bool name="config_proximityCheckOnWakeEnabledByDefault">true</bool>
+
 </resources>
