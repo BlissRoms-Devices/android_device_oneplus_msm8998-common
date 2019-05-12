@@ -241,8 +241,25 @@ PRODUCT_PACKAGES += \
     android.hidl.manager@1.0-java
 
 # Init
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,${LOCAL_PATH}/prebuilt/vendor,$(TARGET_COPY_OUT_VENDOR))
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.class_main.sh \
+    init.msm.usb.configfs.rc \
+    init.oem.rc \
+    init.qcom.class_core.sh \
+    init.qcom.early_boot.sh \
+    init.qcom.post_boot.sh \
+    init.qcom.rc \
+    init.qcom.sensors.sh \
+    init.qcom.sh \
+    init.qcom.usb.rc \
+    init.qcom.usb.sh \
+    init.qti.ims.sh \
+    init.qti.qseecomd.sh \
+    init.target.rc \
+    init.target.performance.rc \
+    init.custom.rc \
+    ueventd.qcom.rc
 
 # IFAA (Fingerprint support for Alipay)
 PRODUCT_PACKAGES += \
