@@ -121,6 +121,22 @@ on boot
    insmod /system/lib/modules/msm-vidc-dyn-gov.ko
    insmod /system/lib/modules/msm-vidc-table-gov.ko
 
+# KCAL permissions
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_enable
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_cont
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_sat
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_hue
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_min
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_min
+   chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
+   chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_val
+
 #Load WLAN driver
 on property:wlan.driver.status=ok
    insmod /vendor/lib/modules/qca_cld3_wlan.ko
@@ -131,6 +147,26 @@ on property:wlan.driver.status=ok
     setprop vendor.usb.rmnet.inst.name "rmnet"
     setprop vendor.usb.dpl.inst.name "dpl"
     setprop sys.usb.configfs 1
+
+# Graphics
+    chown system graphics /sys/class/graphics/fb0/dyn_pu
+    chmod 0664 /sys/class/graphics/fb0/dyn_pu
+    chown system graphics /sys/class/graphics/fb0/idle_time
+    chmod 0664 /sys/class/graphics/fb0/idle_time
+    chown system graphics /sys/class/graphics/fb0/mode
+    chmod 0664 /sys/class/graphics/fb0/mode
+    chown system graphics /sys/class/graphics/fb0/modes
+    chmod 0664 /sys/class/graphics/fb0/modes
+    chown system graphics /sys/class/graphics/fb0/hbm
+    chmod 0664 /sys/class/graphics/fb0/hbm
+    chown system graphics /sys/class/graphics/fb0/srgb
+    chmod 0664 /sys/class/graphics/fb0/SRGB
+    chown system graphics /sys/class/graphics/fb0/dci_p3
+    chmod 0664 /sys/class/graphics/fb0/DCI_P3
+    chown system graphics /sys/class/graphics/fb0/oneplus_mode
+    chmod 0664 /sys/class/graphics/fb0/oneplus_mode
+    chown system graphics /sys/class/graphics/fb0/night_mode
+    chmod 0664 /sys/class/graphics/fb0/night_mode
 
 #Peripheral manager
 service vendor.per_mgr /vendor/bin/pm-service
