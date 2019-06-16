@@ -34,14 +34,16 @@
 
     <!-- Graphics -->
     <string name="graphics_title">Graphics</string>
+    <string name="oneplus_mode_summary"></string>
+    <string name="oneplus_mode_title">OnePlus</string>
     <string name="srgb_mode_summary"></string>
-    <string name="srgb_mode_title">sRGB mode</string>
+    <string name="srgb_mode_title">sRGB</string>
     <string name="hbm_mode_summary"></string>
     <string name="hbm_mode_title">High brightness mode</string>
     <string name="dci_mode_summary"></string>
-    <string name="dci_mode_title">DCI_P3 mode</string>
+    <string name="dci_mode_title">DCI_P3</string>
     <string name="night_mode_summary"></string>
-    <string name="night_mode_title">Night mode</string>
+    <string name="night_mode_title">Night</string>
     <string name="panel_category_title">Panel modes</string>
     <string name="panel_category_summary">Modes for panel color correction</string>
     <string name="off_mode_title">Off</string>
