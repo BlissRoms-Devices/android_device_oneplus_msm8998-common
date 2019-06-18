@@ -67,6 +67,8 @@
 
 /sys/project_info(/.*)?                                         u:object_r:sysfs_data:s0
 
+/sys/kernel/pocket_judge/inpocket                               u:object_r:sysfs_inpocket:s0
+
 # Wifi
 /(vendor|system/vendor)/bin/wifi-mac-generator                  u:object_r:wifi_mac_generator_exec:s0
 
