@@ -177,6 +177,10 @@ on property:wlan.driver.status=ok
     chown system system /sys/class/timed_output/vibrator/vtg_max
     chown system system /sys/class/timed_output/vibrator/vtg_min
 
+# Pocket judge sysfs permissions
+    chown system system /sys/kernel/pocket_judge/inpocket
+    chmod 0664 /sys/kernel/pocket_judge/inpocket
+
 #Peripheral manager
 service vendor.per_mgr /vendor/bin/pm-service
     class core
