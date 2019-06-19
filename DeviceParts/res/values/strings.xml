@@ -23,6 +23,7 @@
     <string name="category_slider">Slider</string>
     <string name="slider_mode_title">Slider mode</string>
     <string name="slider_mode_off">Off</string>
+    <string name="slider_mode_flashlight">Flashlight</string>
     <string name="slider_mode_vibrate">Vibrate</string>
     <string name="slider_mode_silent">Silent</string>
     <string name="slider_mode_priority">Priority only</string>

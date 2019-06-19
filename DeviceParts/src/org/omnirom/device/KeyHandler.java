@@ -187,6 +187,8 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private boolean mFPcheck;
     private boolean mDispOn;
     private boolean isFpgesture;
+    private boolean mTorchState = false;
+    private boolean mUseSliderTorch = false;
 
     private SensorEventListener mProximitySensor = new SensorEventListener() {
         @Override
@@ -508,15 +510,31 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         if ( action == 0) {
             mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
+            mTorchState = false;
         } else if (action == 1) {
             mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_VIBRATE);
+            mTorchState = false;
         } else if (action == 2) {
             mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_SILENT);
+            mTorchState = false;
         } else if (action == 3) {
             mNoMan.setZenMode(ZEN_MODE_IMPORTANT_INTERRUPTIONS, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
+            mTorchState = false;
+        } else if (action == 4) {
+            mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
+            mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
+            mUseSliderTorch = true;
+            mTorchState = true;
+        }
+
+        if (((!mProxyIsNear && mUseProxiCheck) || !mUseProxiCheck) && mUseSliderTorch && action < 4) {
+            launchSpecialActions(AppSelectListPreference.TORCH_ENTRY);
+            mUseSliderTorch = false;
+        } else if (((!mProxyIsNear && mUseProxiCheck) || !mUseProxiCheck) && mUseSliderTorch) {
+            launchSpecialActions(AppSelectListPreference.TORCH_ENTRY);
         }
     }
 
@@ -536,12 +554,17 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
             IStatusBarService service = getStatusBarService();
             if (service != null) {
                 try {
-                    service.toggleCameraFlash();
+                    if (mUseSliderTorch) {
+                        service.toggleCameraFlashState(mTorchState);
+                        return true;
+                    } else {
+                        service.toggleCameraFlash();
+                        return true;
+                    }
                 } catch (RemoteException e) {
-                    // do nothing.
-                }
-            }
-            return true;
+                // do nothing.
+               }
+           }
         } else if (value.equals(AppSelectListPreference.MUSIC_PLAY_ENTRY)) {
             mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
             dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
