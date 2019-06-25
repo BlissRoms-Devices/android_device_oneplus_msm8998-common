@@ -35,25 +35,35 @@
     </Preference>
 
     <PreferenceCategory
-        android:title="@string/category_slider">
+        android:key="notification_slider"
+        android:title="@string/buttons_dashboard_summary">
+
         <ListPreference
-            android:key="slider_mode_top"
-            android:title="@string/slider_mode_title_top"
-            android:entries="@array/slider_key_action_entries"
-            android:entryValues="@array/slider_key_action_values"
-            android:persistent="false" />
+            android:key="slider_usage"
+            android:dialogTitle="@string/notification_slider_usage_title"
+            android:title="@string/notification_slider_usage_title"
+            android:summary="%s"
+            android:entries="@array/notification_slider_usage_entries"
+            android:entryValues="@array/notification_slider_usage_entry_values" />
+
         <ListPreference
-            android:key="slider_mode_center"
-            android:title="@string/slider_mode_title_center"
-            android:entries="@array/slider_key_action_entries"
-            android:entryValues="@array/slider_key_action_values"
-            android:persistent="false" />
+            android:key="action_top_position"
+            android:dialogTitle="@string/notification_slider_selection_dialog_title"
+            android:title="@string/notification_slider_top_position"
+            android:summary="%s" />
+
         <ListPreference
-            android:key="slider_mode_bottom"
-            android:title="@string/slider_mode_title_bottom"
-            android:entries="@array/slider_key_action_entries"
-            android:entryValues="@array/slider_key_action_values"
-            android:persistent="false" />
+            android:key="action_middle_position"
+            android:dialogTitle="@string/notification_slider_selection_dialog_title"
+            android:title="@string/notification_slider_middle_position"
+            android:summary="%s" />
+
+        <ListPreference
+            android:key="action_bottom_position"
+            android:dialogTitle="@string/notification_slider_selection_dialog_title"
+            android:title="@string/notification_slider_bottom_position"
+            android:summary="%s" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

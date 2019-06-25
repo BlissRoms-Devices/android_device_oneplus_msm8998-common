@@ -18,12 +18,20 @@
 package org.omnirom.device;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
+import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
+
+import java.io.File;
+
+import org.omnirom.device.utils.Constants;
+import org.omnirom.device.utils.FileUtils;
 
 public class Startup extends BroadcastReceiver {
 
@@ -146,6 +154,15 @@ public class Startup extends BroadcastReceiver {
         enabled = !TextUtils.isEmpty(value) && !value.equals(AppSelectListPreference.DISABLED_ENTRY);
         restore(getGestureFile(GestureSettings.FP_GESTURE_LONG_PRESS_APP), enabled);
 
+        // Disable button settings if needed
+        if (!hasButtonProcs()) {
+            disableComponent(context, DeviceSettingsActivity.class.getName());
+        } else {
+            enableComponent(context, DeviceSettingsActivity.class.getName());
+            DeviceSettings.restoreSliderStates(context);
+        }
+
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_SRGB_SWITCH, false);
         restore(SRGBModeSwitch.getFile(), enabled);
@@ -159,5 +176,28 @@ public class Startup extends BroadcastReceiver {
         restore(OneplusModeSwitch.getFile(), enabled);
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_ADAPTIVE_SWITCH, false);
         restore(AdaptiveModeSwitch.getFile(), enabled);
+    }
+
+     private boolean hasButtonProcs () {
+        return new File(Constants.NOTIF_SLIDER_NODE).exists();
+    }
+
+     private void disableComponent(Context context, String component) {
+        ComponentName name = new ComponentName(context, component);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(name,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+     private void enableComponent(Context context, String component) {
+        ComponentName name = new ComponentName(context, component);
+        PackageManager pm = context.getPackageManager();
+        if (pm.getComponentEnabledSetting(name)
+                == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+            pm.setComponentEnabledSetting(name,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
     }
 }

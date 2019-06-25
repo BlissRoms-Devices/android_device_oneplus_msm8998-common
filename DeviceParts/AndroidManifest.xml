@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
+    <protected-broadcast android:name="org.omnirom.device.UPDATE_SLIDER_SETTINGS" />
 
     <uses-sdk
         android:minSdkVersion="26"

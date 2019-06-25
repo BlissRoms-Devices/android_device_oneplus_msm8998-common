@@ -17,9 +17,6 @@
 */
 package org.omnirom.device;
 
-import static android.provider.Settings.Global.ZEN_MODE_OFF;
-import static android.provider.Settings.Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
-
 import android.app.ActivityManagerNative;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -63,6 +60,15 @@ import com.android.internal.os.AlternativeDeviceKeyHandler;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.statusbar.IStatusBarService;
 
+import org.omnirom.device.SliderControllerBase;
+import org.omnirom.device.slider.NotificationController;
+import org.omnirom.device.slider.FlashlightController;
+import org.omnirom.device.slider.BrightnessController;
+import org.omnirom.device.slider.RotationController;
+import org.omnirom.device.slider.RingerController;
+
+import java.util.Arrays;
+
 public class KeyHandler implements AlternativeDeviceKeyHandler {
 
     private static final String TAG = "KeyHandler";
@@ -91,10 +97,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private static final int KEY_HOME = 102;
     private static final int KEY_BACK = 158;
     private static final int KEY_RECENTS = 580;
-    private static final int KEY_SLIDER_TOP = 601;
-    private static final int KEY_SLIDER_CENTER = 602;
-    private static final int KEY_SLIDER_BOTTOM = 603;
-
     private static final int MIN_PULSE_INTERVAL_MS = 2500;
     private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
     private static final int HANDWAVE_MAX_DELTA_MS = 1000;
@@ -118,9 +120,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         GESTURE_LEFT_SWIPE_SCANCODE,
         GESTURE_RIGHT_SWIPE_SCANCODE,
         KEY_DOUBLE_TAP,
-        KEY_SLIDER_TOP,
-        KEY_SLIDER_CENTER,
-        KEY_SLIDER_BOTTOM,
         FP_GESTURE_SWIPE_DOWN,
         FP_GESTURE_SWIPE_UP,
         FP_GESTURE_SWIPE_LEFT,
@@ -140,15 +139,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         GESTURE_LEFT_SWIPE_SCANCODE,
         GESTURE_RIGHT_SWIPE_SCANCODE,
         KEY_DOUBLE_TAP,
-        KEY_SLIDER_TOP,
-        KEY_SLIDER_CENTER,
-        KEY_SLIDER_BOTTOM
-    };
-
-    private static final int[] sHandledGestures = new int[]{
-        KEY_SLIDER_TOP,
-        KEY_SLIDER_CENTER,
-        KEY_SLIDER_BOTTOM
     };
 
     private static final int[] sProxiCheckedGestures = new int[]{
@@ -172,7 +162,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private Handler mHandler = new Handler();
     private SettingsObserver mSettingsObserver;
     private static boolean mButtonDisabled;
-    private final NotificationManager mNoMan;
     private final AudioManager mAudioManager;
     private SensorManager mSensorManager;
     private boolean mProxyIsNear;
@@ -187,6 +176,59 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private boolean mFPcheck;
     private boolean mDispOn;
     private boolean isFpgesture;
+
+    private static final String ACTION_UPDATE_SLIDER_SETTINGS
+            = "org.omnirom.device.UPDATE_SLIDER_SETTINGS";
+
+    private static final String EXTRA_SLIDER_USAGE = "usage";
+    private static final String EXTRA_SLIDER_ACTIONS = "actions";
+
+    private final NotificationController mNotificationController;
+    private final FlashlightController mFlashlightController;
+    private final BrightnessController mBrightnessController;
+    private final RotationController mRotationController;
+    private final RingerController mRingerController;
+
+     private SliderControllerBase mSliderController;
+
+     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int usage = intent.getIntExtra(EXTRA_SLIDER_USAGE, 0);
+            int[] actions = intent.getIntArrayExtra(EXTRA_SLIDER_ACTIONS);
+
+             Log.d(TAG, "update usage " + usage + " with actions " +
+                    Arrays.toString(actions));
+
+             if (mSliderController != null) {
+                mSliderController.reset();
+            }
+
+             switch (usage) {
+                case NotificationController.ID:
+                    mSliderController = mNotificationController;
+                    mSliderController.update(actions);
+                    break;
+                case FlashlightController.ID:
+                    mSliderController = mFlashlightController;
+                    mSliderController.update(actions);
+                    break;
+                case BrightnessController.ID:
+                    mSliderController = mBrightnessController;
+                    mSliderController.update(actions);
+                    break;
+                case RotationController.ID:
+                    mSliderController = mRotationController;
+                    mSliderController.update(actions);
+                    break;
+                case RingerController.ID:
+                    mSliderController = mRingerController;
+                    mSliderController.update(actions);
+                    break;
+            }
+            mSliderController.restoreState();
+        }
+    };
 
     private SensorEventListener mProximitySensor = new SensorEventListener() {
         @Override
@@ -298,7 +340,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
                 "GestureWakeLock");
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
-        mNoMan = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mTiltSensor = getSensor(mSensorManager, "com.oneplus.sensor.pickup");
@@ -306,6 +347,14 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
         mContext.registerReceiver(mScreenStateReceiver, screenStateFilter);
+        mNotificationController = new NotificationController(context);
+        mFlashlightController = new FlashlightController(context);
+        mBrightnessController = new BrightnessController(context);
+        mRotationController = new RotationController(context);
+        mRingerController = new RingerController(context);
+
+        mContext.registerReceiver(mUpdateReceiver,
+                new IntentFilter(ACTION_UPDATE_SLIDER_SETTINGS));
     }
 
     private class EventHandler extends Handler {
@@ -314,32 +363,22 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         }
     }
 
-    @Override
     public boolean handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_UP) {
+        int scanCode = event.getScanCode();
+        boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, scanCode);
+        boolean isSliderControllerSupported = mSliderController != null &&
+                mSliderController.isSupported(scanCode);
+        if (!isKeySupported && !isSliderControllerSupported) {
             return false;
         }
-
-        isFpgesture = false;
-        boolean isKeySupported = ArrayUtils.contains(sHandledGestures, event.getScanCode());
-        if (isKeySupported) {
-            if (DEBUG) Log.i(TAG, "scanCode=" + event.getScanCode());
-            switch(event.getScanCode()) {
-                case KEY_SLIDER_TOP:
-                    if (DEBUG) Log.i(TAG, "KEY_SLIDER_TOP");
-                    doHandleSliderAction(0);
-                    return true;
-                case KEY_SLIDER_CENTER:
-                    if (DEBUG) Log.i(TAG, "KEY_SLIDER_CENTER");
-                    doHandleSliderAction(1);
-                    return true;
-                case KEY_SLIDER_BOTTOM:
-                    if (DEBUG) Log.i(TAG, "KEY_SLIDER_BOTTOM");
-                    doHandleSliderAction(2);
-                    return true;
-            }
+        if (isSliderControllerSupported) {
+            mSliderController.processEvent(scanCode);
         }
-
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return true;
+        }
+ 
+       isFpgesture = false;
         if (DEBUG) Log.i(TAG, "nav_code=" + event.getScanCode());
         int fpcode = event.getScanCode();
         mFPcheck = canHandleKeyEvent(event);
@@ -352,7 +391,7 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
                     mContext.startActivity(intent);
             }
         }
-        return isKeySupported;
+        return true;
     }
 
     @Override
@@ -481,39 +520,6 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         if (mUseTiltCheck) {
             mSensorManager.registerListener(mTiltSensorListener, mTiltSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
-
-    private int getSliderAction(int position) {
-        String value = Settings.System.getStringForUser(mContext.getContentResolver(),
-                    Settings.System.OMNI_BUTTON_EXTRA_KEY_MAPPING,
-                    UserHandle.USER_CURRENT);
-        final String defaultValue = DeviceSettings.SLIDER_DEFAULT_VALUE;
-
-        if (value == null) {
-            value = defaultValue;
-        } else if (value.indexOf(",") == -1) {
-            value = defaultValue;
-        }
-        try {
-            String[] parts = value.split(",");
-            return Integer.valueOf(parts[position]);
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    private void doHandleSliderAction(int position) {
-        int action = getSliderAction(position);
-        if ( action == 0) {
-            mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
-            mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
-        } else if (action == 1) {
-            mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
-            mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_VIBRATE);
-        } else if (action == 2) {
-            mNoMan.setZenMode(ZEN_MODE_IMPORTANT_INTERRUPTIONS, null, TAG);
-            mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
         }
     }
 
