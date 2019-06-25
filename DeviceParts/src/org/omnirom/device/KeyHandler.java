@@ -66,6 +66,7 @@ import org.omnirom.device.slider.FlashlightController;
 import org.omnirom.device.slider.BrightnessController;
 import org.omnirom.device.slider.RotationController;
 import org.omnirom.device.slider.RingerController;
+import org.omnirom.device.slider.NotificationRingerController;
 
 import java.util.Arrays;
 
@@ -184,6 +185,7 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private static final String EXTRA_SLIDER_ACTIONS = "actions";
 
     private final NotificationController mNotificationController;
+    private final NotificationRingerController mNotificationRingerController;
     private final FlashlightController mFlashlightController;
     private final BrightnessController mBrightnessController;
     private final RotationController mRotationController;
@@ -223,6 +225,10 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
                     break;
                 case RingerController.ID:
                     mSliderController = mRingerController;
+                    mSliderController.update(actions);
+                    break;
+                case NotificationRingerController.ID:
+                    mSliderController = mNotificationRingerController;
                     mSliderController.update(actions);
                     break;
             }
@@ -352,6 +358,7 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         mBrightnessController = new BrightnessController(context);
         mRotationController = new RotationController(context);
         mRingerController = new RingerController(context);
+        mNotificationRingerController = new NotificationRingerController(context);
 
         mContext.registerReceiver(mUpdateReceiver,
                 new IntentFilter(ACTION_UPDATE_SLIDER_SETTINGS));

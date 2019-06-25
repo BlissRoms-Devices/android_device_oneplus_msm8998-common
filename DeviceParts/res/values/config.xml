@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- The default usage of slider -->
-    <string name="config_defaultNotificationSliderUsage" translatable="false">1</string>
+    <string name="config_defaultNotificationSliderUsage" translatable="false">6</string>
 
     <!-- The default actions of slider when use for notification -->
     <string-array name="config_defaultSliderActionsForNotification" translatable="false">
@@ -53,6 +53,13 @@
         <item>52</item>
         <item>51</item>
         <item>50</item>
+    </string-array>
+
+    <!-- The default actions of slider when use for notification and ringer -->
+    <string-array name="config_defaultSliderActionsForNotificationRinger" translatable="false">
+        <item>65</item>
+        <item>64</item>
+        <item>63</item>
     </string-array>
 
     <bool name="config_device_has_hw_nav_buttons">true</bool>
