@@ -539,6 +539,9 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
             mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_VIBRATE);
         } else if (action == 2) {
+            mNoMan.setZenMode(ZEN_MODE_OFF, null, TAG);
+            mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_SILENT);
+        } else if (action == 3) {
             mNoMan.setZenMode(ZEN_MODE_IMPORTANT_INTERRUPTIONS, null, TAG);
             mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
         }
