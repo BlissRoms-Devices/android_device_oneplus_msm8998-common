@@ -48,9 +48,9 @@ on charger
     # disable thermal core control
     write /sys/module/msm_thermal/core_control/enabled 0
 
-    # online cpu 0 and set governor powersave
+    # online cpu 0 and set governor tripndroid
     write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor tripndroid
 
     # offline remaining cores
     write /sys/devices/system/cpu/cpu1/online 0
@@ -138,9 +138,12 @@ on property:sys.boot_completed=1
     # CPU is configured, re-enable thermal core control
     write /sys/module/msm_thermal/core_control/enabled 1
 
-    # Enable input boost configuration
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800 4:1056000"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 450
+    #Enable boost configuration 
+    write /sys/module/cpu_boost/parameters/dynamic_stune_boost 20
+    write /sys/module/cpu_boost/parameters/boost_ms 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0"
+    write /sys/module/msm_performance/parameters/touchboost 0
+    write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
 
     # Enable bus-dcvs
     write /sys/class/devfreq/soc:qcom,cpubw/governor "bw_hwmon"
@@ -211,8 +214,36 @@ on property:sys.boot_completed=1
     write /proc/sys/kernel/sched_restrict_cluster_spill 1
     write /proc/sys/kernel/sched_prefer_sync_wakee_to_waker 1
 
-    # Set BFQ I/O scheduler
-    setprop sys.io.scheduler "bfq"
+    # Set ANXIETY I/O scheduler
+    setprop sys.io.scheduler "anxiety"
+
+on property:sys.usb.config=msc && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "msc"
+    rm /config/usb_gadget/g1/configs/b.1/f1
+    rm /config/usb_gadget/g1/configs/b.1/f2
+    rm /config/usb_gadget/g1/configs/b.1/f3
+    rm /config/usb_gadget/g1/configs/b.1/f4
+    rm /config/usb_gadget/g1/configs/b.1/f5
+    rm /config/usb_gadget/g1/configs/b.1/f6
+    write /config/usb_gadget/g1/bcdDevice 0x0404
+    write /config/usb_gadget/g1/bcdUSB 0x0200
+    write /config/usb_gadget/g1/bDeviceClass 0x00
+    write /config/usb_gadget/g1/bDeviceSubClass 0x00
+    write /config/usb_gadget/g1/bDeviceProtocol 0x00
+    write /config/usb_gadget/g1/idVendor 0x2a70 # default by factory
+    write /config/usb_gadget/g1/idProduct 0x9011 # default by factory
+    write /config/usb_gadget/g1/strings/0x409/manufacturer OnePlus
+    write /config/usb_gadget/g1/strings/0x409/product OnePlus
+    write /config/usb_gadget/g1/strings/0x409/serialnumber "11223344"
+    #write /config/usb_gadget/g1/functions/mass_storage.0/lun.0/file ""
+    write /config/usb_gadget/g1/functions/mass_storage.0/lun.0/cdrom 1 # dafault value
+    write /config/usb_gadget/g1/functions/mass_storage.0/lun.0/ro 1 # default value
+    symlink /config/usb_gadget/g1/functions/mass_storage.0 config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
 
     # Is IOP even still a thing?
     start vendor.iop
+
+    # QCOM post boot
+    start qcom-post-boot
