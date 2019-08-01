@@ -159,6 +159,10 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 PRODUCT_PACKAGES += \
     DeviceParts
 
+# Doze
+PRODUCT_PACKAGES += \
+    CustomDoze
+
 # Display
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
