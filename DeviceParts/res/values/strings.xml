@@ -53,17 +53,6 @@
     <string name="tile_panel_mode">Panel modes</string>
     <string name="tile_hbm_mode">High brightness modes</string>
 
-    <!-- Doze -->
-    <string name="doze_category_title">Ambient display</string>
-    <string name="doze_category_summary">Wake screen when you receive notifications</string>
-    <string name="wave_check_summary">Pulse notifications on hand wave</string>
-    <string name="wave_check_title">Hand wave</string>
-    <string name="tilt_check_summary">Pulse notifications when device is picked up</string>
-    <string name="tilt_check_title">Pick up</string>
-    <string name="pocket_check_summary">Pulse notifications on removal from pocket</string>
-    <string name="pocket_check_title">Pocket</string>
-    <string name="ambient_display_enable">Ambient display must be enabled in display settings</string>
-
     <!-- Gestures and actions -->
     <string name="choose_app">Choose app</string>
     <string name="category_double_swipe_gesture">II gesture</string>
