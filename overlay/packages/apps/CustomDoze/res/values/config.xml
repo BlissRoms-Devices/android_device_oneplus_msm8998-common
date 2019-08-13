@@ -16,6 +16,11 @@
 */
 -->
 <resources>
+
+    <string name="config_custom_proximity">com.oneplus.sensor.pocket</string>
+    <!-- Defines the custom proximity sensor used by various OEMs like OnePlus-->
+    <string name="config_custom_tilt">com.oneplus.sensor.pickup</string>
+
     <!-- Doze: Table that translates sensor values from the doze_brightness_sensor_type sensor
                to brightness values; -1 means keeping the current brightness. -->
     <integer-array name="config_doze_brightness_sensor_to_brightness">
