@@ -41,7 +41,7 @@ public class VibratorStrengthPreference extends Preference implements
     private int mMaxValue;
     private Vibrator mVibrator;
 
-    private static final String FILE_LEVEL = "/sys/devices/virtual/timed_output/vibrator/vtg_level";
+    private static final String FILE_LEVEL = "/sys/class/timed_output/vibrator/vtg_level";
     private static final long testVibrationPattern[] = {0,250};
 
     public VibratorStrengthPreference(Context context, AttributeSet attrs) {

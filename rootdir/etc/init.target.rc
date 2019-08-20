@@ -171,6 +171,12 @@ on property:wlan.driver.status=ok
     chown system graphics /sys/class/graphics/fb0/adaption_mode
     chmod 0664 /sys/class/graphics/fb0/adaption_mode
 
+# Vibrator
+    chown system system /sys/class/timed_output/vibrator/vtg_default
+    chown system system /sys/class/timed_output/vibrator/vtg_level
+    chown system system /sys/class/timed_output/vibrator/vtg_max
+    chown system system /sys/class/timed_output/vibrator/vtg_min
+
 #Peripheral manager
 service vendor.per_mgr /vendor/bin/pm-service
     class core
