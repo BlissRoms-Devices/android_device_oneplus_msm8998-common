@@ -149,6 +149,16 @@ on property:wlan.driver.status=ok
     setprop vendor.usb.dpl.inst.name "dpl"
     setprop sys.usb.configfs 1
 
+# Tri-State-Key
+    chown system system /proc/tri-state-key/keyCode_top
+    chmod 0660 /proc/tri-state-key/keyCode_top
+
+    chown system system /proc/tri-state-key/keyCode_middle
+    chmod 0660 /proc/tri-state-key/keyCode_middle
+
+    chown system system /proc/tri-state-key/keyCode_bottom
+    chmod 0660 /proc/tri-state-key/keyCode_bottom
+
 # Graphics
     chown system graphics /sys/class/graphics/fb0/dyn_pu
     chmod 0664 /sys/class/graphics/fb0/dyn_pu
