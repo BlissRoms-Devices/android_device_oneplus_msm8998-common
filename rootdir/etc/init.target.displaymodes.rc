@@ -41,3 +41,7 @@ on boot
     chmod 0666 /sys/devices/virtual/graphics/fb0/measured_fps
 
     chmod 0666 /proc/flicker_free/flicker_free
+
+    # Swap Hardware Keys
+    chown system system /proc/s1302/key_rep
+    chmod 0660 /proc/s1302/key_rep

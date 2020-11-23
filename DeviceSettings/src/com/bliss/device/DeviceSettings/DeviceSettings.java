@@ -48,7 +48,10 @@ public class DeviceSettings extends PreferenceFragment
     public static final String KEY_FPS_INFO = "fps_info";
     public static final String KEY_VIBSTRENGTH = "vib_strength";
     public static final String KEY_SETTINGS_PREFIX = "device_setting_";
+    public static final String KEY_BUTTON_SWAP = "button_swap";
 
+    private static final boolean sIsOnePlus5t = android.os.Build.DEVICE.equals("OnePlus5T");
+    private TwoStatePreference mButtonSwap;
     private TwoStatePreference mHBMModeSwitch;
     private SwitchPreference mFpsInfo;
     private VibratorStrengthPreference mVibratorStrength;
@@ -75,6 +78,15 @@ public class DeviceSettings extends PreferenceFragment
         mFpsInfo = findPreference(KEY_FPS_INFO);
         mFpsInfo.setChecked(isFPSOverlayRunning());
         mFpsInfo.setOnPreferenceChangeListener(this);
+        
+        mButtonSwap = (TwoStatePreference) findPreference(KEY_BUTTON_SWAP);
+        if (!sIsOnePlus5t) {
+            mButtonSwap.setEnabled(ButtonSwap.isSupported());
+            mButtonSwap.setChecked(ButtonSwap.isCurrentlyEnabled(this.getContext()));
+            mButtonSwap.setOnPreferenceChangeListener(new ButtonSwap());
+        } else {
+            mButtonSwap.setVisible(false);
+        }
     }
 
     @Override
