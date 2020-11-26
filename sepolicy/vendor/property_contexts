@@ -4,6 +4,10 @@ persist.vendor.oem.dump                u:object_r:diag_prop:s0
 vendor.oem.device.imeicache0           u:object_r:radio_prop:s0
 vendor.oem.device.imeicache1           u:object_r:radio_prop:s0
 
+# Bluetooth
+ro.bt.bdaddr_path                      u:object_r:vendor_bluetooth_prop:s0
+ro.vendor.bt.bdaddr_path               u:object_r:vendor_bluetooth_prop:s0
+
 # Camera
 camera.on                              u:object_r:camera_prop:s0
 persist.camera.                        u:object_r:camera_prop:s0
@@ -24,6 +28,9 @@ persist.vendor.sys.fp.                 u:object_r:vendor_fp_prop:s0
 ro.boot.fpsensor                       u:object_r:vendor_fp_prop:s0
 ro.hardware.fp                         u:object_r:vendor_fp_prop:s0
 vendor.fps_hal.                        u:object_r:vendor_fp_prop:s0
+
+# Firmware
+ro.build.expect.                       u:object_r:exported_default_prop:s0
 
 # RIL
 persist.sys.oem.region                 u:object_r:exported3_radio_prop:s0
