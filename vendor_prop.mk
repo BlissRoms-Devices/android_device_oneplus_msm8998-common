@@ -44,10 +44,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio.offload.multiaac.enable=true \
     vendor.audio.dolby.ds2.enabled=false \
     vendor.audio.dolby.ds2.hardbypass=false \
-    vendor.audio.feature.a2dp_offload.enable=true \
+    vendor.audio.feature.a2dp_offload.enable=false \
     vendor.audio.feature.afe_proxy.enable=true \
     vendor.audio.feature.anc_headset.enable=true \
-    vendor.audio.feature.audio_sphere.enable=true \
     vendor.audio.feature.battery_listener.enable=false \
     vendor.audio.feature.compr_cap.enable=false \
     vendor.audio.feature.compress_in.enable=false \
@@ -92,6 +91,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.audio.sdk.ssr=false \
     vendor.audio.offload.gapless.enabled=true \
     vendor.audio.safx.pbe.enabled=true \
+    vendor.audio.spkr_prot.tx.sampling_rate=48000 \
     vendor.audio.parser.ip.buffer.size=0 \
     vendor.audio.flac.sw.decoder.24bit=true \
     persist.vendor.bt.a2dp_offload_cap=false \
@@ -191,6 +191,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=420 \
     ro.opengles.version=196610 \
     debug.sf.hw=1 \
     debug.sf.enable_hwc_vds=1 \
@@ -302,7 +303,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.usb.controller=a800000.dwc3 \
     sys.usb.rndis.func.name=gsi \
-    sys.usb.rmnet.func.name=gsi
+    sys.usb.rmnet.func.name=gsi \
+    persist.vendor.usb.config.extra=none \
+    vendor.usb.rps_mask=0
 
 # VNDK
 PRODUCT_PROPERTY_OVERRIDES += \
