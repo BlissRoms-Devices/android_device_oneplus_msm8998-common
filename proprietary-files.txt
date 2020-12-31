@@ -1,4 +1,4 @@
-# Common proprietary files - from 
+# Common proprietary files - from
 # OnePlus/OnePlus5/OnePlus5:10/QKQ1.191014.012/2010292059, unless pinned
 
 # ADSP / CDSP / MDSP / SDSP
@@ -709,10 +709,8 @@ vendor/lib64/hw/gatekeeper.msm8998.so
 # GPS
 vendor/bin/loc_launcher
 vendor/bin/lowi-server
-vendor/bin/qdmastatsd
 vendor/bin/slim_daemon
 vendor/bin/xtra-daemon
-vendor/etc/init/init.qdmastats.rc
 -vendor/etc/vintf/manifest/vendor.qti.gnss@3.0-service.xml
 vendor/lib/hw/vendor.qti.gnss@3.0-impl.so
 vendor/lib/libdataitems.so
@@ -723,7 +721,6 @@ vendor/lib/libizat_core.so
 -vendor/lib/libloc_api_v02.so
 vendor/lib/liblocationservice.so
 vendor/lib/liblocationservice_glue.so
-vendor/lib/libqdma_file_agent.so
 vendor/lib/libslimclient.so
 vendor/lib/libxtadapter.so
 vendor/lib/vendor.qti.gnss@3.0-service.so
@@ -738,7 +735,6 @@ vendor/lib64/liblocationservice.so
 vendor/lib64/liblocationservice_glue.so
 vendor/lib64/liblowi_client.so
 vendor/lib64/liblowi_wifihal.so
-vendor/lib64/libqdma_file_agent.so
 vendor/lib64/libslimclient.so
 vendor/lib64/libxtadapter.so
 vendor/lib64/vendor.qti.gnss@3.0-service.so
@@ -1032,14 +1028,10 @@ product/lib64/libdiag_system.so
 vendor/bin/irsc_util
 vendor/bin/mlid
 vendor/bin/pd-mapper
-vendor/bin/ssgqmigd
-vendor/bin/ssgtzd
 vendor/lib/libdiag.so
 -vendor/lib/libdsi_netctrl.so
 vendor/lib/libdsutils.so
 vendor/lib/libidl.so
-vendor/lib/libminkdescriptor.so
-vendor/lib/libminksocket.so
 vendor/lib/libqcbor.so
 vendor/lib/libqcci_legacy.so
 vendor/lib/libqdi.so
@@ -1056,8 +1048,6 @@ vendor/lib64/libdiag.so
 -vendor/lib64/libdsi_netctrl.so
 vendor/lib64/libdsutils.so
 vendor/lib64/libidl.so
-vendor/lib64/libminkdescriptor.so
-vendor/lib64/libminksocket.so
 vendor/lib64/libqcbor.so
 vendor/lib64/libqcci_legacy.so
 vendor/lib64/libqdi.so
@@ -1369,12 +1359,6 @@ vendor/lib/hw/vendor.qti.hardware.soter@1.0-impl.so
 vendor/lib/vendor.qti.hardware.soter@1.0.so
 vendor/lib64/hw/vendor.qti.hardware.soter@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.soter@1.0.so
-
-# SSR
-vendor/bin/qcom-system-daemon
-vendor/bin/subsystem_ramdump
-vendor/lib64/libSubSystemShutdown.so
-vendor/lib64/libsubsystem_control.so
 
 # Thermal
 vendor/bin/thermal-engine
