@@ -24,7 +24,7 @@ import com.bliss.device.DeviceSettings.Utils;
 
 public class SRGBModeSwitch implements OnPreferenceChangeListener {
 
-    private static final String FILE = "/sys/devices/virtual/graphics/fb0/SRGB";
+    private static final String FILE = "/sys/devices/virtual/graphics/fb0/srgb";
 
     public static String getFile() {
         if (Utils.fileWritable(FILE)) {
