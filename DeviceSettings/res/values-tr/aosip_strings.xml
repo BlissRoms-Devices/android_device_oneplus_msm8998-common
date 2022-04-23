@@ -73,17 +73,19 @@
     <string name="touchscreen_gesture_action_volume_up">Medya sesini yükselt</string>
 
     <!-- Notification slider -->
-    <string name="notification_slider_category_title">Bildirim kaydırıcı</string>
-    <string name="notification_slider_selection_dialog_title">Eylem</string>
-    <string name="notification_slider_top_position">Üst konum</string>
-    <string name="notification_slider_middle_position">Orta konum</string>
-    <string name="notification_slider_bottom_position">Alt konum</string>
-    <string name="notification_slider_mode_total_silence">Tamamen sessiz</string>
-    <string name="notification_slider_mode_alarms_only">Yalnızca alarmlar</string>
-    <string name="notification_slider_mode_priority_only">Yalnızca öncelikli</string>
-    <string name="notification_slider_mode_silent">Sessiz</string>
-    <string name="notification_slider_mode_vibrate">Titreşim</string>
-    <string name="notification_slider_mode_none">Normal</string>
+    <string name="alert_slider_category_title">Bildirim kaydırıcı</string>
+    <string name="alert_slider_selection_dialog_title">Eylem</string>
+    <string name="alert_slider_top_position">Üst konum</string>
+    <string name="alert_slider_middle_position">Orta konum</string>
+    <string name="alert_slider_bottom_position">Alt konum</string>
+    <string name="alert_slider_mode_dnd_total_silence">Tamamen sessiz</string>
+    <string name="alert_slider_mode_dnd_alarms_only">Yalnızca alarmlar</string>
+    <string name="alert_slider_mode_dnd_priority_only">Yalnızca öncelikli</string>
+    <string name="alert_slider_mode_silent">Sessiz</string>
+    <string name="alert_slider_mode_vibration">Titreşim</string>
+    <string name="alert_slider_mode_normal">Normal</string>
+    <string name="alert_slider_mute_media_title">Medyayı sessize al</string>
+    <string name="alert_slider_mute_media_summary">Sessize geçerken medyayı sessize al</string>
     <string name="buttons_dashboard_summary">Uyarı kaydırıcı ayarları</string>
 
     <!-- Vibration control -->

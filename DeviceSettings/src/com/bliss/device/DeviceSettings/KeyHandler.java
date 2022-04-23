@@ -17,191 +17,180 @@
 
 package com.bliss.device.DeviceSettings;
 
-import android.Manifest;
-import android.app.ActivityThread;
 import android.app.NotificationManager;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.session.MediaSessionLegacyHelper;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
-import android.os.SystemProperties;
+import android.media.AudioSystem;
+import android.os.IBinder;
+import android.os.UEventObserver;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.SparseIntArray;
-import android.view.KeyEvent;
-import android.widget.Toast;
-
-import com.android.internal.os.DeviceKeyHandler;
-import com.android.internal.util.ArrayUtils;
+import androidx.preference.PreferenceManager;
 
 import com.bliss.device.DeviceSettings.Constants;
 import com.bliss.device.DeviceSettings.DeviceSettings;
-import com.bliss.device.DeviceSettings.R;
 
-public class KeyHandler implements DeviceKeyHandler {
-
-    private static final String TAG = KeyHandler.class.getSimpleName();
-    private static final int GESTURE_REQUEST = 1;
-
-    private static final SparseIntArray sSupportedSliderZenModes = new SparseIntArray();
-    private static final SparseIntArray sSupportedSliderRingModes = new SparseIntArray();
-    private static final SparseIntArray sSupportedSliderHaptics = new SparseIntArray();
-    static {
-        sSupportedSliderZenModes.put(Constants.KEY_VALUE_TOTAL_SILENCE, Settings.Global.ZEN_MODE_NO_INTERRUPTIONS);
-        sSupportedSliderZenModes.put(Constants.KEY_VALUE_SILENT, Settings.Global.ZEN_MODE_OFF);
-        sSupportedSliderZenModes.put(Constants.KEY_VALUE_PRIORTY_ONLY, Settings.Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
-        sSupportedSliderZenModes.put(Constants.KEY_VALUE_VIBRATE, Settings.Global.ZEN_MODE_OFF);
-        sSupportedSliderZenModes.put(Constants.KEY_VALUE_NORMAL, Settings.Global.ZEN_MODE_OFF);
-
-        sSupportedSliderRingModes.put(Constants.KEY_VALUE_TOTAL_SILENCE, AudioManager.RINGER_MODE_NORMAL);
-        sSupportedSliderRingModes.put(Constants.KEY_VALUE_SILENT, AudioManager.RINGER_MODE_SILENT);
-        sSupportedSliderRingModes.put(Constants.KEY_VALUE_PRIORTY_ONLY, AudioManager.RINGER_MODE_NORMAL);
-        sSupportedSliderRingModes.put(Constants.KEY_VALUE_VIBRATE, AudioManager.RINGER_MODE_VIBRATE);
-        sSupportedSliderRingModes.put(Constants.KEY_VALUE_NORMAL, AudioManager.RINGER_MODE_NORMAL);
-
-        sSupportedSliderHaptics.put(Constants.KEY_VALUE_TOTAL_SILENCE, VibrationEffect.EFFECT_THUD);
-        sSupportedSliderHaptics.put(Constants.KEY_VALUE_SILENT, VibrationEffect.EFFECT_DOUBLE_CLICK);
-        sSupportedSliderHaptics.put(Constants.KEY_VALUE_PRIORTY_ONLY, VibrationEffect.EFFECT_THUD);
-        sSupportedSliderHaptics.put(Constants.KEY_VALUE_VIBRATE, VibrationEffect.EFFECT_HEAVY_CLICK);
-        sSupportedSliderHaptics.put(Constants.KEY_VALUE_NORMAL, -1);
-    }
-
-    private static Toast mToast;
-
-    private final Context mContext;
-    private final Context mResContext;
-    private final Context mSysUiContext;
-    private final PowerManager mPowerManager;
-    private final NotificationManager mNotificationManager;
-    private final AudioManager mAudioManager;
-
-    private SensorManager mSensorManager;
-    private Sensor mProximitySensor;
+public class KeyHandler extends Service {
+    private AudioManager mAudioManager;
+    private NotificationManager mNotificationManager;
     private Vibrator mVibrator;
-    WakeLock mProximityWakeLock;
-    WakeLock mGestureWakeLock;
-    private int mProximityTimeOut;
-    private boolean mProximityWakeSupported;
+    private UEventObserver mAlertSliderEventObserver;
+    private BroadcastReceiver mBroadcastReceiver;
+    private SharedPreferences mSharedPrefereces;
 
-    public KeyHandler(Context context) {
-        mContext = context;
-        mResContext = getResContext(context);
-        mSysUiContext = ActivityThread.currentActivityThread().getSystemUiContext();
-        mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mNotificationManager
-                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mGestureWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "GestureWakeLock");
+    private boolean wasMuted = false;
 
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        if (mVibrator == null || !mVibrator.hasVibrator()) {
-            mVibrator = null;
-        }
-    }
+    // Vibration effects
+    private static final VibrationEffect MODE_NORMAL_EFFECT = VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK);
+    private static final VibrationEffect MODE_VIBRATION_EFFECT = VibrationEffect.get(VibrationEffect.EFFECT_DOUBLE_CLICK);
 
-    private boolean hasSetupCompleted() {
-        return Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
-    }
+    // Slider key positions
+    private static final int POSITION_TOP = 1;
+    private static final int POSITION_MIDDLE = 2;
+    private static final int POSITION_BOTTOM = 3;
 
-    public KeyEvent handleKeyEvent(KeyEvent event) {
-        int scanCode = event.getScanCode();
-        String keyCode = Constants.sKeyMap.get(scanCode);
+    // ZEN constants
+    private static final int ZEN_OFFSET = 2;
+    private static final int ZEN_PRIORITY_ONLY = 3;
+    private static final int ZEN_TOTAL_SILENCE = 4;
+    private static final int ZEN_ALARMS_ONLY = 5;
 
-        int keyCodeValue = 0;
-        try {
-            keyCodeValue = Constants.getPreferenceInt(mContext, keyCode);
-        } catch (Exception e) {
-            return event;
-        }
+    // Preference keys
+    private static final String ALERT_SLIDER_TOP_KEY = "config_top_position";
+    private static final String ALERT_SLIDER_MIDDLE_KEY = "config_middle_position";
+    private static final String ALERT_SLIDER_BOTTOM_KEY = "config_bottom_position";
+    private static final String MUTE_MEDIA_WITH_SILENT = "config_mute_media";
 
-        if (!hasSetupCompleted()) {
-            return event;
-        }
+    private final String TAG = "KeyHandler";
 
-        // We only want ACTION_UP event
-        if (event.getAction() != KeyEvent.ACTION_UP) {
-            return null;
-        }
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-        mAudioManager.setRingerModeInternal(sSupportedSliderRingModes.get(keyCodeValue));
-        mNotificationManager.setZenMode(sSupportedSliderZenModes.get(keyCodeValue), null, TAG);
-        doHapticFeedback(sSupportedSliderHaptics.get(keyCodeValue));
+        mAudioManager = this.getSystemService(AudioManager.class);
+        mVibrator = this.getSystemService(Vibrator.class);
+        mNotificationManager = this.getSystemService(NotificationManager.class);
+        mSharedPrefereces = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String toastText;
-        Resources res = mResContext.getResources();
-        int key = sSupportedSliderRingModes.keyAt(
-                sSupportedSliderRingModes.indexOfKey(keyCodeValue));
-        switch (key) {
-            case Constants.KEY_VALUE_TOTAL_SILENCE: // DND - no int'
-                toastText = res.getString(R.string.slider_toast_dnd);
-                break;
-            case Constants.KEY_VALUE_SILENT: // Ringer silent
-                toastText = res.getString(R.string.slider_toast_silent);
-                break;
-            case Constants.KEY_VALUE_PRIORTY_ONLY: // DND - priority
-                toastText = res.getString(R.string.slider_toast_priority);
-                break;
-            case Constants.KEY_VALUE_VIBRATE: // Ringer vibrate
-                toastText = res.getString(R.string.slider_toast_vibrate);
-                break;
-            default:
-            case Constants.KEY_VALUE_NORMAL: // Ringer normal DND off
-                toastText = res.getString(R.string.slider_toast_normal);
-                break;
-        }
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void run() {
-                if (mToast != null) mToast.cancel();
-                mToast = Toast.makeText(
-                        mSysUiContext, toastText, Toast.LENGTH_SHORT);
-                mToast.show();
+            public void onReceive(Context context, Intent intent) {
+                int stream = intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE, -1);
+                boolean state = intent.getBooleanExtra(AudioManager.EXTRA_STREAM_VOLUME_MUTED, false);
+                if (stream == AudioSystem.STREAM_MUSIC && state == false) {
+                    wasMuted = false;
+                }
             }
-        });
+        };
 
+        mAlertSliderEventObserver = new UEventObserver() {
+            @Override
+            public void onUEvent(UEvent event) {
+                String switchEvent = event.get("SWITCH_STATE");
+                if (switchEvent != null) {
+                    handleMode(Integer.parseInt(switchEvent));
+                    return;
+                }
+                String state = event.get("STATE");
+                if (state != null) {
+                    boolean none = state.contains("USB=0");
+                    boolean vibration = state.contains("HOST=0");
+                    boolean silent = state.contains("null)=0");
+
+                    if (none && !vibration && !silent) {
+                        handleMode(POSITION_BOTTOM);
+                    } else if (!none && vibration && !silent) {
+                        handleMode(POSITION_MIDDLE);
+                    } else if (!none && !vibration && silent) {
+                        handleMode(POSITION_TOP);
+                    }
+
+                    return;
+                }
+            }
+        };
+
+        this.registerReceiver(
+                mBroadcastReceiver,
+                new IntentFilter(AudioManager.STREAM_MUTE_CHANGED_ACTION)
+        );
+
+        mAlertSliderEventObserver.startObserving("tri-state-key");
+        mAlertSliderEventObserver.startObserving("tri_state_key");
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
         return null;
     }
 
-    private void doHapticFeedback(int effect) {
-        if (mVibrator != null && mVibrator.hasVibrator() && effect != -1) {
-            mVibrator.vibrate(VibrationEffect.get(effect));
+    private void vibrateIfNeeded(int mode) {
+        switch (mode) {
+            case AudioManager.RINGER_MODE_VIBRATE:
+                mVibrator.vibrate(MODE_VIBRATION_EFFECT);
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                mVibrator.vibrate(MODE_NORMAL_EFFECT);
+                break;
+            default:
+                return;
         }
+        return;
     }
 
-    private Context getResContext(Context context) {
-        Context resContext;
-        try {
-            resContext = context.createPackageContext("com.bliss.device.DeviceSettings",
-                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
-        } catch (NameNotFoundException e) {
-            // nothing to do about this, shouldn't ever reach here anyway
-            resContext = context;
+    private void handleMode(int position) {
+        boolean muteMedia = mSharedPrefereces.getBoolean(MUTE_MEDIA_WITH_SILENT, false);
+        int mode;
+        switch (position) {
+            case POSITION_TOP:
+                mode = Integer.parseInt(mSharedPrefereces.getString(ALERT_SLIDER_TOP_KEY, "0"));
+                break;
+            case POSITION_MIDDLE:
+                mode = Integer.parseInt(mSharedPrefereces.getString(ALERT_SLIDER_MIDDLE_KEY, "1"));
+                break;
+            case POSITION_BOTTOM:
+                mode = Integer.parseInt(mSharedPrefereces.getString(ALERT_SLIDER_BOTTOM_KEY, "2"));
+                break;
+            default:
+                return;
         }
-        return resContext;
-    }
 
-    public void handleNavbarToggle(boolean enabled) {
-        // do nothing
-    }
-
-    public boolean canHandleKeyEvent(KeyEvent event) {
-        return false;
+        switch (mode) {
+            case AudioManager.RINGER_MODE_SILENT:
+                mNotificationManager.setZenMode(Settings.Global.ZEN_MODE_OFF, null, TAG);
+                mAudioManager.setRingerModeInternal(mode);
+                if (muteMedia) {
+                    mAudioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
+                    wasMuted = true;
+                }
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+            case AudioManager.RINGER_MODE_NORMAL:
+                mNotificationManager.setZenMode(Settings.Global.ZEN_MODE_OFF, null, TAG);
+                mAudioManager.setRingerModeInternal(mode);
+                if (muteMedia && wasMuted) {
+                    mAudioManager.adjustVolume(AudioManager.ADJUST_UNMUTE, 0);
+                }
+                break;
+            case ZEN_PRIORITY_ONLY:
+            case ZEN_TOTAL_SILENCE:
+            case ZEN_ALARMS_ONLY:
+                mAudioManager.setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
+                mNotificationManager.setZenMode(mode - ZEN_OFFSET, null, TAG);
+                if (muteMedia && wasMuted) {
+                    mAudioManager.adjustVolume(AudioManager.ADJUST_UNMUTE, 0);
+                }
+                break;
+            default:
+                return;
+        }
+        vibrateIfNeeded(mode);
     }
 }

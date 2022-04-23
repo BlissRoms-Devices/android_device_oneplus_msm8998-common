@@ -74,17 +74,19 @@
     <string name="touchscreen_gesture_action_volume_up">Medienlautstärke erhöhen</string>
     <string name="touchscreen_gesture_action_ambient_display">Ambient-Display anzeigen</string>
     <!-- Notification slider -->
-    <string name="notification_slider_category_title">Benachrichtigungs-Slider</string>
-    <string name="notification_slider_selection_dialog_title">Aktion</string>
-    <string name="notification_slider_top_position">Obere Position</string>
-    <string name="notification_slider_middle_position">Mittlere Position</string>
-    <string name="notification_slider_bottom_position">Untere Position</string>
-    <string name="notification_slider_mode_total_silence">Totale Stille</string>
-    <string name="notification_slider_mode_alarms_only">Nur Wecker</string>
-    <string name="notification_slider_mode_priority_only">Nur Priorität</string>
-    <string name="notification_slider_mode_silent">Lautlos</string>
-    <string name="notification_slider_mode_vibrate">Vibrieren</string>
-    <string name="notification_slider_mode_none">Normal</string>
+    <string name="alert_slider_category_title">Benachrichtigungs-Slider</string>
+    <string name="alert_slider_selection_dialog_title">Aktion</string>
+    <string name="alert_slider_top_position">Obere Position</string>
+    <string name="alert_slider_middle_position">Mittlere Position</string>
+    <string name="alert_slider_bottom_position">Untere Position</string>
+    <string name="alert_slider_mode_dnd_total_silence">Totale Stille</string>
+    <string name="alert_slider_mode_dnd_alarms_only">Nur Wecker</string>
+    <string name="alert_slider_mode_dnd_priority_only">Nur Priorität</string>
+    <string name="alert_slider_mode_silent">Lautlos</string>
+    <string name="alert_slider_mode_vibration">Vibrieren</string>
+    <string name="alert_slider_mode_normal">Normal</string>
+    <string name="alert_slider_mute_media_title">Medien stummschalten</string>
+    <string name="alert_slider_mute_media_summary">Stummschalten von Medien beim Umschalten auf lautlos</string>
     <string name="buttons_dashboard_summary">Alert-Slider Einstellungen</string>
     <!-- Vibration control -->
     <string name="category_vibrator">Vibration</string>

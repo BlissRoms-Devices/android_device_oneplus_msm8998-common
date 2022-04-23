@@ -58,6 +58,8 @@ public class Startup extends BroadcastReceiver {
         }
         VibratorStrengthPreference.restore(context);
 
+        context.startService(new Intent(context, KeyHandler.class));
+
         if (Build.DEVICE.equals("OnePlus5")) {
             restore("/proc/flicker_free/min_brightness", "66");
         } else if (Build.DEVICE.equals("OnePlus5T")) {

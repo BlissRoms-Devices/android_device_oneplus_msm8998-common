@@ -33,17 +33,19 @@
     <string name="tile_panel_mode">Modos de painel</string>
     <string name="tile_hbm_mode">Modos de brilho alto</string>
     <!-- Notification slider -->
-    <string name="notification_slider_category_title">Deslizador de notificações</string>
-    <string name="notification_slider_selection_dialog_title">Ação</string>
-    <string name="notification_slider_top_position">Em cima</string>
-    <string name="notification_slider_middle_position">No meio</string>
-    <string name="notification_slider_bottom_position">Em baixo</string>
-    <string name="notification_slider_mode_total_silence">Silêncio total</string>
-    <string name="notification_slider_mode_alarms_only">Apenas alarmes</string>
-    <string name="notification_slider_mode_priority_only">Apenas prioritárias</string>
-    <string name="notification_slider_mode_silent">Silêncio</string>
-    <string name="notification_slider_mode_vibrate">Vibrar</string>
-    <string name="notification_slider_mode_none">Normal</string>
+    <string name="alert_slider_category_title">Deslizador de notificações</string>
+    <string name="alert_slider_selection_dialog_title">Ação</string>
+    <string name="alert_slider_top_position">Em cima</string>
+    <string name="alert_slider_middle_position">No meio</string>
+    <string name="alert_slider_bottom_position">Em baixo</string>
+    <string name="alert_slider_mode_dnd_total_silence">Silêncio total</string>
+    <string name="alert_slider_mode_dnd_alarms_only">Apenas alarmes</string>
+    <string name="alert_slider_mode_dnd_priority_only">Apenas prioritárias</string>
+    <string name="alert_slider_mode_silent">Silêncio</string>
+    <string name="alert_slider_mode_vibration">Vibrar</string>
+    <string name="alert_slider_mode_normal">Normal</string>
+    <string name="alert_slider_mute_media_title">Mudo de mídia</string>
+    <string name="alert_slider_mute_media_summary">Mudo de meios quando se muda para o silêncio</string>
     <string name="buttons_dashboard_summary">Definições do Slider de Alerta</string>
     <!-- Vibration control -->
     <string name="category_vibrator">Vibração</string>

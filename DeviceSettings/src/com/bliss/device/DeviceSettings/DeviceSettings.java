@@ -62,15 +62,6 @@ public class DeviceSettings extends PreferenceFragment
             mVibratorStrength.setEnabled(VibratorStrengthPreference.isSupported());
 
         TwoStatePreference mDCModeSwitch = findPreference(KEY_DC_SWITCH);
-        ListPreference mTopKeyPref = findPreference(Constants.NOTIF_SLIDER_TOP_KEY);
-        mTopKeyPref.setValueIndex(Constants.getPreferenceInt(getContext(), Constants.NOTIF_SLIDER_TOP_KEY));
-        mTopKeyPref.setOnPreferenceChangeListener(this);
-        ListPreference mMiddleKeyPref = findPreference(Constants.NOTIF_SLIDER_MIDDLE_KEY);
-        mMiddleKeyPref.setValueIndex(Constants.getPreferenceInt(getContext(), Constants.NOTIF_SLIDER_MIDDLE_KEY));
-        mMiddleKeyPref.setOnPreferenceChangeListener(this);
-        ListPreference mBottomKeyPref = findPreference(Constants.NOTIF_SLIDER_BOTTOM_KEY);
-        mBottomKeyPref.setValueIndex(Constants.getPreferenceInt(getContext(), Constants.NOTIF_SLIDER_BOTTOM_KEY));
-        mBottomKeyPref.setOnPreferenceChangeListener(this);
 
         mDCModeSwitch.setEnabled(DCModeSwitch.isSupported());
         mDCModeSwitch.setChecked(DCModeSwitch.isCurrentlyEnabled());
@@ -113,9 +104,6 @@ public class DeviceSettings extends PreferenceFragment
             } else {
                 getContext().stopService(hbmIntent);
             }
-        } else if (newValue instanceof String) {
-            Constants.setPreferenceInt(getContext(), preference.getKey(),
-                    Integer.parseInt((String) newValue));
         }
         return true;
     }

@@ -33,17 +33,19 @@
     <string name="tile_panel_mode">Tryby panelu</string>
     <string name="tile_hbm_mode">Tryb wysokiej jasności</string>
     <!-- Notification slider -->
-    <string name="notification_slider_category_title">Suwak powiadomień</string>
-    <string name="notification_slider_selection_dialog_title">Akcja</string>
-    <string name="notification_slider_top_position">Górna pozycja</string>
-    <string name="notification_slider_middle_position">Środkowa pozycja</string>
-    <string name="notification_slider_bottom_position">Dolna pozycja</string>
-    <string name="notification_slider_mode_total_silence">Całkowite wyciszenie</string>
-    <string name="notification_slider_mode_alarms_only">Tylko alarmy</string>
-    <string name="notification_slider_mode_priority_only">Tylko priorytetowe</string>
-    <string name="notification_slider_mode_silent">Wyciszony</string>
-    <string name="notification_slider_mode_vibrate">Wibracje</string>
-    <string name="notification_slider_mode_none">Normalny</string>
+    <string name="alert_slider_category_title">Suwak powiadomień</string>
+    <string name="alert_slider_selection_dialog_title">Akcja</string>
+    <string name="alert_slider_top_position">Górna pozycja</string>
+    <string name="alert_slider_middle_position">Środkowa pozycja</string>
+    <string name="alert_slider_bottom_position">Dolna pozycja</string>
+    <string name="alert_slider_mode_dnd_total_silence">Całkowite wyciszenie</string>
+    <string name="alert_slider_mode_dnd_alarms_only">Tylko alarmy</string>
+    <string name="alert_slider_mode_dnd_priority_only">Tylko priorytetowe</string>
+    <string name="alert_slider_mode_silent">Wyciszony</string>
+    <string name="alert_slider_mode_vibration">Wibracje</string>
+    <string name="alert_slider_mode_normal">Normalny</string>
+    <string name="alert_slider_mute_media_title">Wycisz media</string>
+    <string name="alert_slider_mute_media_summary">Wyciszanie mediów przy przełączaniu na wyciszenie</string>
     <string name="buttons_dashboard_summary">Ustawienia suwaka powiadomień</string>
     <!-- Vibration control -->
     <string name="category_vibrator">Wibracje</string>
