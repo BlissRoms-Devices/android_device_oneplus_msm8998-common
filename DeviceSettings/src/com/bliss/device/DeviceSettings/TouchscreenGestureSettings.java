@@ -39,7 +39,7 @@ import com.android.internal.bliss.hardware.LineageHardwareManager; // Need FWB s
 import com.android.internal.bliss.hardware.TouchscreenGesture; // Need FWB support
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
-import com.android.settingslib.collapsingtoolbar.R;
+import com.android.settingslib.widget.R;
 
 import java.lang.System;
 
