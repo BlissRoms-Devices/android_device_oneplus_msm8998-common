@@ -491,4 +491,7 @@
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
         <item>com.bliss.device.DeviceSettings.KeyHandler</item>
     </string-array>
+
+    <!-- Whether device has physical tri state switch -->
+    <bool name="config_hasAlertSlider">true</bool>
 </resources>
