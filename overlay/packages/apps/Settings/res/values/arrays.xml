@@ -12,5 +12,15 @@
         <item>-1</item>
         <item>-1</item>
     </integer-array>
+    
+    <!-- Override supported color mode labels.
+         NOTE: This list must have the exact same items count as config_availableColorModes -->
+    <string-array name="available_vendor_color_modes" translatable="false">
+        <item>Vivid</item>
+        <item>Natural</item>
+        <item>AMOLED Wide Gamut</item>
+        <item>sRGB</item>
+        <item>Display P3</item>
+    </string-array>
 
 </resources>
